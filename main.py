@@ -19,6 +19,18 @@ FORMS = {
         "id": "242124684987064",
         "name": "formulaire médical"
     }
+    "province_form": {
+        "id": "260126850265353",
+        "name": "formulaire province hors île de france"
+    }
+    "europe_form": {
+        "id": "260053531330341",
+        "name": "formulaire europe"
+    }
+    "special_form": {
+        "id": "260054216669357",
+        "name": "formulaire spécial motif exceptionnel"
+    }
 }
 
 JOTFORM_BASE_URL = "https://api.jotform.com"
@@ -38,7 +50,7 @@ def healthcheck():
 # --------------------------------------------------
 # Endpoint test : lecture des soumissions
 # --------------------------------------------------
-@app.get("/forms/{form_key}/columns")
+@app.get("/generate_csv")
 def log_form_columns(form_key: str):
     if form_key not in FORMS:
         return {"error": "Form not found"}
