@@ -54,7 +54,7 @@ def healthcheck():
 def log_form_columns():
     for form in FORMS:
 
-        form_id = form["id"]
+        form_id = form[0]
     
         url = f"{JOTFORM_BASE_URL}/form/{form_id}/submissions"
         params = {
@@ -73,7 +73,8 @@ def log_form_columns():
             return {"message": "No submissions found"}
     
         submission = submissions[0]
-    
+        logger.info(submissions)
+        
         columns = []
     
         # Champs du formulaire
