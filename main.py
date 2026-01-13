@@ -46,7 +46,7 @@ app = FastAPI(title="Jotform Data Service")
 @app.get("/")
 def healthcheck():
     return {"status": "ok"}
-
+    
 # --------------------------------------------------
 # Endpoint test : lecture des soumissions
 # --------------------------------------------------
@@ -59,7 +59,7 @@ def log_form_columns():
         url = f"{JOTFORM_BASE_URL}/form/{form_id}/submissions"
         params = {
             "apiKey": JOTFORM_API_KEY,
-            "limit": 1  # on prend UNE soumission pour extraire les colonnes
+            "limit": 10  # on prend UNE soumission pour extraire les colonnes
         }
     
         response = requests.get(url, params=params)
