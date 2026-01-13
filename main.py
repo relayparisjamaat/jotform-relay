@@ -51,47 +51,43 @@ def healthcheck():
 # Endpoint test : lecture des soumissions
 # --------------------------------------------------
 @app.get("/generate_csv")
-def log_form_columns(form_key: str):
-    if form_key not in FORMS:
-        return {"error": "Form not found"}
+def log_form_columns():
+    for form in FORMS:
 
-    form_id = FORMS[form_key]["id"]
+        form_id = form["id"]
+    
+        url = f"{JOTFORM_BASE_URL}/form/{form_id}/submissions"
+        params = {
+            "apiKey": JOTFORM_API_KEY,
+            "limit": 1  # on prend UNE soumission pour extraire les colonnes
+        }
+    
+        response = requests.get(url, params=params)
+        response.raise_for_status()
+    
+        data = response.json()
+        submissions = data.get("content", [])
+    
+        if not submissions:
+            logger.info("Aucune soumission trouvée.")
+            return {"message": "No submissions found"}
+    
+        submission = submissions[0]
+    
+        columns = []
+    
+        # Champs du formulaire
+        for answer in submission["answers"].values():
+            columns.append(answer["text"])
+    
+        # Champs système intéressants
+        columns.extend([
+            "Submission ID",
+            "Created At",
+            "Approval Status"
+        ])
+    
+        # 🔥 LOG IMPORTANT (ce que tu as demandé)
+        logger.info("COLONNES FORMULAIRE : %s", " | ".join(columns))
 
-    url = f"{JOTFORM_BASE_URL}/form/{form_id}/submissions"
-    params = {
-        "apiKey": JOTFORM_API_KEY,
-        "limit": 1  # on prend UNE soumission pour extraire les colonnes
-    }
-
-    response = requests.get(url, params=params)
-    response.raise_for_status()
-
-    data = response.json()
-    submissions = data.get("content", [])
-
-    if not submissions:
-        logger.info("Aucune soumission trouvée.")
-        return {"message": "No submissions found"}
-
-    submission = submissions[0]
-
-    columns = []
-
-    # Champs du formulaire
-    for answer in submission["answers"].values():
-        columns.append(answer["text"])
-
-    # Champs système intéressants
-    columns.extend([
-        "Submission ID",
-        "Created At",
-        "Approval Status"
-    ])
-
-    # 🔥 LOG IMPORTANT (ce que tu as demandé)
-    logger.info("COLONNES FORMULAIRE : %s", " | ".join(columns))
-
-    return {
-        "form": FORMS[form_key]["name"],
-        "columns": columns
-    }
+    return
