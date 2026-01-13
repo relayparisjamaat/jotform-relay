@@ -54,8 +54,10 @@ def healthcheck():
 def log_form_columns():
     for form in FORMS:
 
+        print(form)
         form_id = form[0]
-    
+        print(form_id)
+        
         url = f"{JOTFORM_BASE_URL}/form/{form_id}/submissions"
         params = {
             "apiKey": JOTFORM_API_KEY,
