@@ -18,15 +18,15 @@ FORMS = {
     "medical_form": {
         "id": "242124684987064",
         "name": "formulaire médical"
-    }
+    },
     "province_form": {
         "id": "260126850265353",
         "name": "formulaire province hors île de france"
-    }
+    },
     "europe_form": {
         "id": "260053531330341",
         "name": "formulaire europe"
-    }
+    },
     "special_form": {
         "id": "260054216669357",
         "name": "formulaire spécial motif exceptionnel"
