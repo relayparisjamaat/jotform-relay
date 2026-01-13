@@ -64,10 +64,16 @@ def log_form_columns():
     
         response = requests.get(url, params=params)
         response.raise_for_status()
-    
+
+        print(url)
+        print(params)
+        
         data = response.json()
         submissions = data.get("content", [])
-    
+
+        print(data)
+        print(submissions)
+        
         if not submissions:
             logger.info("Aucune soumission trouvée.")
             return {"message": "No submissions found"}
