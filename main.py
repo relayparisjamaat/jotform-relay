@@ -53,6 +53,9 @@ async def jotform_approval(request: Request):
     submission_id = data.get("submission_id")
     approval_result = data.get("approval_result")
 
+    print(submission_id)
+    print(approval_result)
+    
     if not submission_id or not approval_result:
         raise HTTPException(status_code=400, detail="Missing data")
 
@@ -60,17 +63,19 @@ async def jotform_approval(request: Request):
         "submission[statutDapprobation]": approval_result,
     }
 
+    print(payload)
+
     response = requests.post(
         f"{JOTFORM_BASE_URL}/submission/{submission_id}",
         params={"apiKey": JOTFORM_API_KEY},
         data=payload,
         timeout=10
     )
-
+    
     if response.status_code != 200:
         print("❌ Jotform API error:", response.text)
         raise HTTPException(status_code=500, detail="Jotform API error")
-
+    
     print(f"✅ Submission {submission_id} mise à jour : {approval_result}")
     
     return {"status": "ok"}
