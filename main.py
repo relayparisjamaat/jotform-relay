@@ -47,6 +47,7 @@ def healthcheck():
 async def jotform_approval(request: Request):
     data = await request.form()
     print("Jotform webhook keys:", list(data.keys()))
+    print("Jotform webhook payload:", dict(data))
     print(data)
     
     submission_id = data.get("submission_id")
