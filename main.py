@@ -60,6 +60,14 @@ async def jotform_approval(request: Request):
         data=payload,
         timeout=10
     )
+
+    if response.status_code != 200:
+        print("❌ Jotform API error:", response.text)
+        raise HTTPException(status_code=500, detail="Jotform API error")
+
+    print(f"✅ Submission {submission_id} mise à jour : {approval_result}")
+
+    return {"status": "ok"}
     
 # --------------------------------------------------
 # Endpoint test : lecture des soumissions
