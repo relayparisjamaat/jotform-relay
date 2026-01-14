@@ -21,7 +21,7 @@ FORMS_ID = {
     "special_form" : "260054216669357"
 }
 
-JOTFORM_BASE_URL = "https://api.jotform.com"
+JOTFORM_BASE_URL = "https://eu-api.jotform.com"
 
 # --------------------------------------------------
 # FastAPI app
