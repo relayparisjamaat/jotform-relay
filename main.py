@@ -46,7 +46,7 @@ def log_form_columns():
         
         url = f"{JOTFORM_BASE_URL}/form/{form_id}/submissions"
         params = {
-            "apiKey": JOTFORM_API_KEY
+            "apiKey": JOTFORM_API_KEY,
             "limit": 10  # on prend UNE soumission pour extraire les colonnes
         }
     
