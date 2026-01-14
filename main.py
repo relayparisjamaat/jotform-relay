@@ -2,6 +2,11 @@ from fastapi import FastAPI, Request, HTTPException
 import requests
 import logging
 import os
+import json
+from datetime import datetime, timezone
+import socket
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 # --------------------------------------------------
 # Configuration logging (logs visibles dans Render)
