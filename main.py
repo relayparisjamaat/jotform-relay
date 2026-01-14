@@ -43,7 +43,7 @@ def log_form_columns():
     for form in FORMS_ID.keys():
 
         print(form)
-        form_id = FORM_ID[form]
+        form_id = FORMS_ID[form]
         print(form_id)
         
         url = f"{JOTFORM_BASE_URL}/form/{form_id}/submissions"
