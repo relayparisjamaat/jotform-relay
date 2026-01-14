@@ -33,7 +33,6 @@ JOTFORM_BASE_URL = "https://eu-api.jotform.com"
 # --------------------------------------------------
 app = FastAPI(title="Jotform Data Service")
 
-
 # --------------------------------------------------
 # Healthcheck (obligatoire pour Render)
 # --------------------------------------------------
@@ -71,6 +70,8 @@ async def jotform_approval(request: Request):
         data=payload,
         timeout=10
     )
+
+    print(response)
     
     if response.status_code != 200:
         print("❌ Jotform API error:", response.text)
