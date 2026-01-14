@@ -28,12 +28,38 @@ JOTFORM_BASE_URL = "https://eu-api.jotform.com"
 # --------------------------------------------------
 app = FastAPI(title="Jotform Data Service")
 
+
 # --------------------------------------------------
 # Healthcheck (obligatoire pour Render)
 # --------------------------------------------------
 @app.get("/")
 def healthcheck():
     return {"status": "ok"}
+
+# --------------------------------------------------
+# Approval workflow
+# --------------------------------------------------
+@app.get("/approval")
+async def jotform_approval(request: Request):
+    data = await request.json()
+
+    submission_id = data.get("submission_id")
+    approval_result = data.get("approval_result")
+
+    if not submission_id or not approval_result:
+        raise HTTPException(status_code=400, detail="Missing data")
+
+    payload = {
+        "submission[approval_status]": approval_result,
+        "submission[approval_date]": datetime.utcnow().isoformat(),
+    }
+
+    response = requests.post(
+        f"{JOTFORM_API_BASE}/submission/{submission_id}",
+        params={"apiKey": JOTFORM_API_KEY},
+        data=payload,
+        timeout=10
+    )
     
 # --------------------------------------------------
 # Endpoint test : lecture des soumissions
