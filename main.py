@@ -66,9 +66,10 @@ def log_form_columns():
         
         if not submissions:
             logger.info("Aucune soumission trouvée.")
-    
-        submission = submissions[0]
+            continue
+            
         logger.info(submissions)
+        submission = submissions[0]
         
         columns = []
     
