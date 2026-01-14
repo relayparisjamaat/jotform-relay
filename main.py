@@ -43,7 +43,7 @@ def healthcheck():
 # --------------------------------------------------
 # Approval workflow
 # --------------------------------------------------
-@app.get("/approval")
+@app.post("/approval")
 async def jotform_approval(request: Request):
     data = await request.form()
     print("Jotform webhook keys:", list(data.keys()))
