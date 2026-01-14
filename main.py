@@ -49,7 +49,7 @@ def log_form_columns():
         url = f"{JOTFORM_BASE_URL}/form/{form_id}/submissions"
         params = {
             "apiKey": JOTFORM_API_KEY,
-            "limit": 10  # on prend UNE soumission pour extraire les colonnes
+            "limit": 1  # on prend UNE soumission pour extraire les colonnes
         }
     
         response = requests.get(url, params=params)
@@ -66,7 +66,6 @@ def log_form_columns():
         
         if not submissions:
             logger.info("Aucune soumission trouvée.")
-            return {"message": "No submissions found"}
     
         submission = submissions[0]
         logger.info(submissions)
