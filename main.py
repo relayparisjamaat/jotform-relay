@@ -47,7 +47,9 @@ def healthcheck():
 @app.get("/approval")
 async def jotform_approval(request: Request):
     data = await request.form()
+    print("Jotform webhook keys:", list(data.keys()))
     print(data)
+    
     submission_id = data.get("submission_id")
     approval_result = data.get("approval_result")
 
@@ -55,12 +57,11 @@ async def jotform_approval(request: Request):
         raise HTTPException(status_code=400, detail="Missing data")
 
     payload = {
-        "submission[approval_status]": approval_result,
-        "submission[approval_date]": datetime.utcnow().isoformat(),
+        "submission[statutDapprobation]": approval_result,
     }
 
     response = requests.post(
-        f"{JOTFORM_API_BASE}/submission/{submission_id}",
+        f"{JOTFORM_BASE_URL}/submission/{submission_id}",
         params={"apiKey": JOTFORM_API_KEY},
         data=payload,
         timeout=10
@@ -71,7 +72,7 @@ async def jotform_approval(request: Request):
         raise HTTPException(status_code=500, detail="Jotform API error")
 
     print(f"✅ Submission {submission_id} mise à jour : {approval_result}")
-
+    
     return {"status": "ok"}
     
 # --------------------------------------------------
