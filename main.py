@@ -45,7 +45,16 @@ def healthcheck():
 # --------------------------------------------------
 @app.api_route("/approval", methods=["POST", "GET"])
 async def jotform_approval(request: Request):
-    data = await request.form()
+    raw_body = await request.body()
+    print("RAW BODY:", raw_body)
+
+    try:
+        form = await request.form()
+        print("FORM DATA:", dict(form))
+    except Exception as e:
+        print("FORM PARSE ERROR:", str(e))
+        
+    '''data = await request.form()
     print("Jotform webhook keys:", list(data.keys()))
     print("Jotform webhook payload:", dict(data))
     print(data)
@@ -79,7 +88,7 @@ async def jotform_approval(request: Request):
         raise HTTPException(status_code=500, detail="Jotform API error")
     
     print(f"✅ Submission {submission_id} mise à jour : {approval_result}")
-    
+    '''
     return {"status": "ok"}
     
 # --------------------------------------------------
