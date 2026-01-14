@@ -41,8 +41,8 @@ def healthcheck():
 # --------------------------------------------------
 @app.get("/approval")
 async def jotform_approval(request: Request):
-    data = await request.json()
-
+    data = await request.form()
+    print(data)
     submission_id = data.get("submission_id")
     approval_result = data.get("approval_result")
 
