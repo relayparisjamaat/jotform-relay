@@ -42,25 +42,21 @@ def healthcheck():
 def log_form_columns():
     for form in FORMS_ID.keys():
 
-        print(form)
         form_id = FORMS_ID[form]
-        print(form_id)
         
         url = f"{JOTFORM_BASE_URL}/form/{form_id}/submissions"
         params = {
             "apiKey": JOTFORM_API_KEY
-            #"limit": 1  # on prend UNE soumission pour extraire les colonnes
+            "limit": 10  # on prend UNE soumission pour extraire les colonnes
         }
     
         response = requests.get(url, params=params)
         response.raise_for_status()
-
-        print(url)
-        print(params)
         
         data = response.json()
         submissions = data.get("content", [])
 
+        print(form)
         print(data)
         print(submissions)
         
@@ -85,6 +81,6 @@ def log_form_columns():
         ])
     
         # 🔥 LOG IMPORTANT (ce que tu as demandé)
-        logger.info("COLONNES FORMULAIRE : %s", " | ".join(columns))
+        #logger.info("COLONNES FORMULAIRE : %s", " | ".join(columns))
 
     return
