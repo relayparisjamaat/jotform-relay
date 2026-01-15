@@ -41,6 +41,20 @@ def healthcheck():
     return {"status": "ok"}
 
 # --------------------------------------------------
+# Send expiration date reminder
+# --------------------------------------------------
+@app.get("/send_expire_email")
+def send_email_expiration():
+    return
+
+# --------------------------------------------------
+# Delete expired data
+# --------------------------------------------------
+@app.get("/delete_expire_data")
+def delete_expired_data():
+    return
+    
+# --------------------------------------------------
 # Approval workflow
 # --------------------------------------------------
 @app.api_route("/approval", methods=["POST", "GET"])
@@ -53,12 +67,12 @@ async def jotform_approval(request: Request):
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid JSON body")
 
-    logger.info(f"APPROVAL PAYLOAD: {data}")
+    logger.info(f"APPROVAL PAYLOAD RECEIVED: {data}")
 
     approval_status = data.get("approval_status")
     submission_id = data.get("submission_id")
-    print(submission_id)
-    print(approval_status)
+    print("Submission id : ", submission_id)
+    print("Approval status : ", approval_status)
     
     if not submission_id:
         raise HTTPException(status_code=400, detail="Missing submission_id")
@@ -66,15 +80,11 @@ async def jotform_approval(request: Request):
     if not approval_status:
         raise HTTPException(status_code=400, detail="Missing approval status")
         
-    logger.info(
-        f"Submission {submission_id} -> approval_status={approval_status}"
-    )
-        
     payload = {
         "submission[statutDapprobation]": approval_status,
     }
 
-    print(payload)
+    print("Payload built for sending : ", payload)
 
     response = requests.post(
         f"{JOTFORM_BASE_URL}/submission/{submission_id}",
@@ -82,16 +92,14 @@ async def jotform_approval(request: Request):
         data=payload,
         timeout=10
     )
-
-    print(response)
     
     if response.status_code != 200:
         print("❌ Jotform API error:", response.text)
         raise HTTPException(status_code=500, detail="Jotform API error")
-    
-    print(f"✅ Submission {submission_id} mise à jour : {approval_status}")
-    
-    return {"status": "ok"}
+        return {"status": "nok"}
+    else:
+        print(f"✅ Submission {submission_id} mise à jour : {approval_status}")
+        return {"status": "ok"}
     
 # --------------------------------------------------
 # Endpoint test : lecture des soumissions
