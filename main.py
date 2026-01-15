@@ -101,7 +101,7 @@ async def jotform_approval(request: Request):
         raise HTTPException(status_code=400, detail="Missing approval status")
         
 
-    key = keyget_field_id(form_id, "statutDapprobation", JOTFORM_API_KEY)
+    key = get_field_id(form_id, "statutDapprobation", JOTFORM_API_KEY)
     print("Key : ", key)
     payload = {
         "submission[{key}]": approval_status,
