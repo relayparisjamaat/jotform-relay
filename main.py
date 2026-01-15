@@ -57,10 +57,27 @@ def delete_expired_data():
 # --------------------------------------------------
 # Approval workflow
 # --------------------------------------------------
+def get_field_id(form_id: str, target_name: str, api_key: str) -> str:
+    url = f"{JOTFORM_BASE_URL}/form/{form_id}/questions"
+    headers = {
+        "Authorization": f"Bearer {api_key}"
+    }
+
+    r = requests.get(url, headers=headers)
+    r.raise_for_status()
+
+    questions = r.json()["content"]
+
+    for field_id, field in questions.items():
+        # Priorité au "name" (le plus stable)
+        if field.get("name") == target_name:
+            return field_id
+    raise ValueError(f"Champ '{target_name}' introuvable dans le formulaire {form_id}")
+
 @app.api_route("/approval", methods=["POST", "GET"])
 async def jotform_approval(request: Request):
     #raw_body = await request.body()
-    #print("RAW BODY:", raw_body)
+    print("RAW BODY:", raw_body)
 
     try:
         data = await request.json()
@@ -68,11 +85,13 @@ async def jotform_approval(request: Request):
         raise HTTPException(status_code=400, detail="Invalid JSON body")
 
     logger.info(f"APPROVAL PAYLOAD RECEIVED: {data}")
-
+    
     approval_status = data.get("approval_status")
     submission_id = data.get("submission_id")
+    form_id = data.get("form_id")
     print("Submission id : ", submission_id)
     print("Approval status : ", approval_status)
+    print("Form_id : ", form_id)
     
     if not submission_id:
         raise HTTPException(status_code=400, detail="Missing submission_id")
@@ -80,14 +99,11 @@ async def jotform_approval(request: Request):
     if not approval_status:
         raise HTTPException(status_code=400, detail="Missing approval status")
         
-    '''
+
+    key = keyget_field_id(form_id, "statutDapprobation", JOTFORM_API_KEY)
+    print("Key : ", key)
     payload = {
-        "submission[statutDapprobation]": approval_status,
-    }
-    '''
-    
-    payload = {
-        "submission[23]": approval_status,
+        "submission[{key}]": approval_status,
     }
 
     print("Payload built for sending : ", payload)
