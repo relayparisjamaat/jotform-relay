@@ -76,11 +76,12 @@ def get_field_id(form_id: str, target_name: str, api_key: str) -> str:
 
 @app.api_route("/approval", methods=["POST", "GET"])
 async def jotform_approval(request: Request):
-    #raw_body = await request.body()
+    raw_body = await request.body()
     print("RAW BODY:", raw_body)
 
     try:
         data = await request.json()
+        print("RAW DATA:", data)
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid JSON body")
 
