@@ -80,8 +80,12 @@ async def jotform_approval(request: Request):
     if not approval_status:
         raise HTTPException(status_code=400, detail="Missing approval status")
         
-    payload = {
+    '''payload = {
         "submission[statutDapprobation]": approval_status,
+    }'''
+
+     payload = {
+        "submission[[23]]": approval_status,
     }
 
     print("Payload built for sending : ", payload)
